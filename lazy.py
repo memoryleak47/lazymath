@@ -3,14 +3,17 @@
 import random
 import sys
 
-MAX_COMPLEXITY = 4
-MAX_COMPLEXITY_TRIES = 200
-MAX_INSERTION_TRIES = 5
+MAX_COMPLEXITY = 5
+MAX_COMPLEXITY_TRIES = 2000
+MAX_INSERTION_TRIES = 7
 ARGS_AMOUNT = 2
 
 RULES = list()
-RULES.append(((2, 2), 8))
-RULES.append(((3, 2), 18))
+RULES.append(((2,1), 0))
+RULES.append(((3,1), 3))
+RULES.append(((4,1), 8))
+RULES.append(((5,1), 15))
+RULES.append(((6,1), 24))
 
 ALLOWEDFUNCS = ["max($,$)", "min($,$)", "$*$", "float($)/float($)", "$+$", "$-$", "($+$)", "($-$)"]
 
@@ -36,7 +39,10 @@ def insertRandom(string):
 def validate(func):
 	for rule in RULES:
 		args, res = rule
-		if eval(func) != res:
+		try:
+			if eval(func) != res:
+				return False
+		except:
 			return False
 	return True
 
