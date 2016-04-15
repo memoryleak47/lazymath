@@ -3,19 +3,16 @@
 import random
 import sys
 
-MAX_COMPLEXITY = 5
+MAX_COMPLEXITY = 100
 MAX_COMPLEXITY_TRIES = 2000
 MAX_INSERTION_TRIES = 7
-ARGS_AMOUNT = 2
+ARGS_AMOUNT = 1
 
 RULES = list()
-RULES.append(([2], 0))
-RULES.append(([3], 3))
-RULES.append(([4], 8))
-RULES.append(([5], 15))
-RULES.append(([6], 24))
+RULES.append(([0], 0))
+RULES.append(([1], 1))
 
-ALLOWEDFUNCS = ["max($,$)", "min($,$)", "$*$", "float($)/float($)", "$+$", "$-$", "($+$)", "($-$)"]
+ALLOWEDFUNCS = ["max($,$)", "min($,$)", "$*$", "float($)/float($)", "$+$", "$-$", "($+$)", "($-$)", "pow($,$)"]
 
 def getRandomFunc():
 	return ALLOWEDFUNCS[random.randint(0, len(ALLOWEDFUNCS)-1)]
@@ -52,7 +49,7 @@ def insertVars(func):
 	return func
 
 # increase complexity
-for complexity in range(1, MAX_COMPLEXITY):
+for complexity in range(MAX_COMPLEXITY):
 	print("complexity=" + str(complexity))
 	# try
 	for tries in range(MAX_COMPLEXITY_TRIES):
@@ -60,9 +57,9 @@ for complexity in range(1, MAX_COMPLEXITY):
 		# insertRandom
 		for i in range(complexity):
 			func = insertRandom(func)
-			# insertVars
-			for x in range(MAX_INSERTION_TRIES):
-				varfunc = insertVars(func)
-				if validate(varfunc):
-					print(varfunc)
-					sys.exit()
+		# insertVars
+		for x in range(MAX_INSERTION_TRIES):
+			varfunc = insertVars(func)
+			if validate(varfunc):
+				print(varfunc)
+				sys.exit()
