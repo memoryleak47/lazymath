@@ -9,11 +9,11 @@ MAX_INSERTION_TRIES = 7
 ARGS_AMOUNT = 2
 
 RULES = list()
-RULES.append(((2,1), 0))
-RULES.append(((3,1), 3))
-RULES.append(((4,1), 8))
-RULES.append(((5,1), 15))
-RULES.append(((6,1), 24))
+RULES.append(([2], 0))
+RULES.append(([3], 3))
+RULES.append(([4], 8))
+RULES.append(([5], 15))
+RULES.append(([6], 24))
 
 ALLOWEDFUNCS = ["max($,$)", "min($,$)", "$*$", "float($)/float($)", "$+$", "$-$", "($+$)", "($-$)"]
 
