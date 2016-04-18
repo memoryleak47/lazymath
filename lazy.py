@@ -51,16 +51,20 @@ class FunctionCreator():
 	def __increase(self):
 		if self.complexity == 0:
 			return OVERFLOW
+		# increase args
 		for arg in self.args:
 			if arg.__increase() != OVERFLOW:
 				return not OVERFLOW
+		# rearrangement
 		if len(self.args) == 2 and self.args[1].complexity != self.complexity-1:
 			self.args[0] = FunctionCreator(self.args[0].complexity-1)
 			self.args[1] = FunctionCreator(self.args[1].complexity+1)
 			return not OVERFLOW
-		if self.counter+1 > len(FUNCS)-1: # unsure
+		# reset
+		if self.counter+1 > len(FUNCS)-1:
 			self.__updateCounter(0)
 			return OVERFLOW
+		# update
 		self.__updateCounter(self.counter+1)
 		return not OVERFLOW
 
@@ -70,8 +74,11 @@ class FunctionCreator():
 		if self.counter > len(FUNCS)-1:
 			die("__get(): self.counter("+str(self.counter)+") outta range for FUNCS")
 		tmp = FUNCS[self.counter]
+		if "@" in tmp:
+			die("illegal sign '@' in tmp")
+		tmp = tmp.replace("$", "@")
 		for i in range(len(self.args)):
-			spot = tmp.find("$")
+			spot = tmp.find("@")
 			argstr = self.args[i].__get()
 			tmp = tmp[:spot] + argstr + tmp[spot+1:]
 		return tmp
