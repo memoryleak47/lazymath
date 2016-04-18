@@ -93,7 +93,7 @@ def validate(func):
 			return False
 	return True
 
-for complexity in range(MIN_COMPLEXITY, MAX_COMPLEXITY):
+for complexity in range(MIN_COMPLEXITY, MAX_COMPLEXITY+1):
 	print("complexity=" + str(complexity))
 	fc = FunctionCreator(complexity)
 	while True:
