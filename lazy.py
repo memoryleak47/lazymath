@@ -6,12 +6,14 @@ import math
 
 MIN_COMPLEXITY = 0
 MAX_COMPLEXITY = 100
-MAX_COMPLEXITY_TRIES = 2000
-MAX_INSERTION_TRIES = 7
 ARGS_AMOUNT = 1
 TOLERANCE = 0.03
 
 ALLOWEDFUNCS = ["max($,$)", "min($,$)", "$*$", "float($)/float($)", "$+$", "$-$", "($+$)", "($-$)", "float($)/float(2)"]
+VARS=["1", "2"]
+
+for arg in range(ARGS_AMOUNT):
+	VARS.append("args[" + str(arg) + "]")
 
 RULES = list()
 RULES.append(([3], 2))
@@ -81,19 +83,6 @@ class FunctionCreator():
 			return OVERFLOW
 		return tmp
 
-def insertAt(insertion, index, string):
-	return string[:index] + insertion + string[index+1:]
-
-def insertAtRandomPoint(insertion, string):
-	l = list()
-	for x in range(len(string)):
-		if string[x] == '$':
-			l.append(x)
-	if len(l) == 0:
-		print("insertAtRandomPoint: NOPE")
-		return
-	return insertAt(insertion, l[random.randint(0, len(l)-1)], string)
-
 def validate(func):
 	for rule in RULES:
 		args, res = rule
@@ -104,12 +93,8 @@ def validate(func):
 			return False
 	return True
 
-def insertVars(func):
-	while "$" in func:
-		func = insertAtRandomPoint("args[" + str(random.randint(0, ARGS_AMOUNT-1)) + "]", func)
-	return func
-
 for complexity in range(MIN_COMPLEXITY, MAX_COMPLEXITY):
+	print("complexity=" + str(complexity))
 	fc = FunctionCreator(complexity)
 	while True:
 		func = fc.getNext()
@@ -117,9 +102,25 @@ for complexity in range(MIN_COMPLEXITY, MAX_COMPLEXITY):
 			break
 		else:
 			# insertVars
-			for x in range(MAX_INSERTION_TRIES):
-				varfunc = insertVars(func)
+			varIndexes=list()
+			for x in range(func.count("$")):
+				varIndexes.append(0)
+			while True:
+				varfunc = func
+				for i in varIndexes:
+					varfunc = varfunc[:varfunc.find("$")] + VARS[i] + varfunc[varfunc.find("$")+1:]
 				if validate(varfunc):
 					print(varfunc)
 					sys.exit()
-die("Game over")
+				else:
+					overflowed=True
+					for i in range(len(varIndexes)):
+						if varIndexes[i] == len(VARS)-1:
+							varIndexes[i] = 0
+						else:
+							varIndexes[i] += 1
+							overflowed=False
+							break
+					if overflowed:
+						break
+print("Game over")
