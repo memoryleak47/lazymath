@@ -1,16 +1,15 @@
 #!/usr/bin/env python
 
-import random
 import sys
 import math
 
 MIN_COMPLEXITY = 0
-MAX_COMPLEXITY = 100
+MAX_COMPLEXITY = 6
 ARGS_AMOUNT = 1
 TOLERANCE = 0.03
 
-FUNCS = ["max($,$)", "min($,$)", "$*$", "float($)/float($)", "$+$", "$-$", "($+$)", "($-$)", "float($)/float(2)"]
-VARS=["1", "2"]
+FUNCS = ["($+$)", "($-$)"]
+VARS=["1"]
 
 for arg in range(ARGS_AMOUNT):
 	VARS.append("args[" + str(arg) + "]")
@@ -78,10 +77,7 @@ class FunctionCreator():
 		return tmp
 
 	def getNext(self):
-		tmp = self.__get()
-		if self.__increase() == OVERFLOW:
-			return OVERFLOW
-		return tmp
+		return self.__get(), (self.__increase() == OVERFLOW)
 
 def validate(func):
 	for rule in RULES:
@@ -97,30 +93,30 @@ for complexity in range(MIN_COMPLEXITY, MAX_COMPLEXITY+1):
 	print("complexity=" + str(complexity))
 	fc = FunctionCreator(complexity)
 	while True:
-		func = fc.getNext()
-		if func == OVERFLOW:
-			break
-		else:
-			# insertVars
-			varIndexes=list()
-			for x in range(func.count("$")):
-				varIndexes.append(0)
-			while True:
-				varfunc = func
-				for i in varIndexes:
-					varfunc = varfunc[:varfunc.find("$")] + VARS[i] + varfunc[varfunc.find("$")+1:]
-				if validate(varfunc):
-					print(varfunc)
-					sys.exit()
-				else:
-					overflowed=True
-					for i in range(len(varIndexes)):
-						if varIndexes[i] == len(VARS)-1:
-							varIndexes[i] = 0
-						else:
-							varIndexes[i] += 1
-							overflowed=False
-							break
-					if overflowed:
+		func, overflow = fc.getNext()
+
+		# insertVars
+		varIndexes=list()
+		for x in range(func.count("$")):
+			varIndexes.append(0)
+		while True:
+			varfunc = func
+			for i in varIndexes:
+				varfunc = varfunc[:varfunc.find("$")] + VARS[i] + varfunc[varfunc.find("$")+1:]
+			if validate(varfunc):
+				print(varfunc)
+				sys.exit()
+			else:
+				checkedAllVars=True
+				for i in range(len(varIndexes)):
+					if varIndexes[i] == len(VARS)-1:
+						varIndexes[i] = 0
+					else:
+						varIndexes[i] += 1
+						checkedAllVars=False
 						break
+				if checkedAllVars:
+					break
+		if overflow == OVERFLOW:
+			break
 print("Game over")
