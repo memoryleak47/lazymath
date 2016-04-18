@@ -30,11 +30,11 @@ class FunctionCreator():
 		self.complexity = complexity
 		self.counter = 0
 		self.args = list()
-		self.updateCounter(counter)
+		self.__updateCounter(counter)
 
-	def updateCounter(self, counter):
+	def __updateCounter(self, counter):
 		if counter > len(FUNCS)-1:
-			die("updateCounter("+str(self.counter)+") outta range for FUNCS")
+			die("FunctionCreator::__updateCounter("+str(self.counter)+") outta range for FUNCS")
 		self.counter = counter
 		self.args = list()
 		if self.complexity > 0:
@@ -60,9 +60,9 @@ class FunctionCreator():
 			self.args[1] = FunctionCreator(self.args[1].complexity+1)
 			return not OVERFLOW
 		if self.counter+1 > len(FUNCS)-1: # unsure
-			self.updateCounter(0)
+			self.__updateCounter(0)
 			return OVERFLOW
-		self.updateCounter(self.counter+1)
+		self.__updateCounter(self.counter+1)
 		return not OVERFLOW
 
 	def __get(self):
