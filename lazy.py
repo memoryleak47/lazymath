@@ -9,7 +9,7 @@ MAX_COMPLEXITY = 100
 ARGS_AMOUNT = 1
 TOLERANCE = 0.03
 
-ALLOWEDFUNCS = ["max($,$)", "min($,$)", "$*$", "float($)/float($)", "$+$", "$-$", "($+$)", "($-$)", "float($)/float(2)"]
+FUNCS = ["max($,$)", "min($,$)", "$*$", "float($)/float($)", "$+$", "$-$", "($+$)", "($-$)", "float($)/float(2)"]
 VARS=["1", "2"]
 
 for arg in range(ARGS_AMOUNT):
@@ -33,14 +33,14 @@ class FunctionCreator():
 		self.updateCounter(counter)
 
 	def updateCounter(self, counter):
-		if counter > len(ALLOWEDFUNCS)-1:
-			die("updateCounter("+str(self.counter)+") outta range for ALLOWEDFUNCS")
+		if counter > len(FUNCS)-1:
+			die("updateCounter("+str(self.counter)+") outta range for FUNCS")
 		self.counter = counter
 		self.args = list()
 		if self.complexity > 0:
 			gotOne = False
-			for i in range(len(ALLOWEDFUNCS[self.counter])):
-				if ALLOWEDFUNCS[self.counter][i] == '$':
+			for i in range(len(FUNCS[self.counter])):
+				if FUNCS[self.counter][i] == '$':
 					if gotOne == False:
 						gotOne = True
 						self.args.append(FunctionCreator(self.complexity-1))
@@ -59,7 +59,7 @@ class FunctionCreator():
 			self.args[0] = FunctionCreator(self.args[0].complexity-1)
 			self.args[1] = FunctionCreator(self.args[1].complexity+1)
 			return not OVERFLOW
-		if self.counter+1 > len(ALLOWEDFUNCS)-1: # unsure
+		if self.counter+1 > len(FUNCS)-1: # unsure
 			self.updateCounter(0)
 			return OVERFLOW
 		self.updateCounter(self.counter+1)
@@ -68,9 +68,9 @@ class FunctionCreator():
 	def __get(self):
 		if self.complexity == 0:
 			return "$"
-		if self.counter > len(ALLOWEDFUNCS)-1:
-			die("__get(): self.counter("+str(self.counter)+") outta range for ALLOWEDFUNCS")
-		tmp = ALLOWEDFUNCS[self.counter]
+		if self.counter > len(FUNCS)-1:
+			die("__get(): self.counter("+str(self.counter)+") outta range for FUNCS")
+		tmp = FUNCS[self.counter]
 		for i in range(len(self.args)):
 			spot = tmp.find("$")
 			argstr = self.args[i].__get()
