@@ -1,0 +1,20 @@
+# core
+
+# TODO veraltet?
+
+class Expression:
+	def toString()
+	def multiply() ... # not really
+	def getTestValue(dict)
+
+class Term(Expression):
+
+class Relation(Expression):
+
+
+class ConstantTerm(Term):
+
+
+class Plus(Term):
+
+class BiggerThan(Relation):
