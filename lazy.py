@@ -8,12 +8,17 @@ import math
 MIN_COMPLEXITY = 0
 MAX_COMPLEXITY = 6
 TOLERANCE = 0.03
-FUNCS = ["($+$)", "($-$)"]
-VARS=["1"]
+FUNCS = ["max($,$)", "min($,$)", "($+$)", "($-$)", "($*$)", "($/$)"]
+VARS=["0", "1", "2"]
 
 RULES = list()
-RULES.append(([3], 2))
-RULES.append(([5], 4))
+
+# here you give the data samples of the function you intend to solve:
+
+# my function is 2x+3
+RULES.append(([0], 3))
+RULES.append(([1], 5))
+RULES.append(([2], 7))
 
 # main code
 
